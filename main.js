@@ -111,14 +111,16 @@ const matrixCode = process.env.MATRIX_CODE.split(',')
     const assignments = json.events
 
     console.log(
-      assignments
-        .map((a) => {
-          const courseName = a.course.fullname.replace(/\s\/\s.+/g, '')
-          const assignmentName =
-            a.name.match(/「(.+)」の提出期限が近づいています/)[1]
-          const dueDate = new Date(a.timestart * 1000).toLocaleString('ja-JP')
-          return `${courseName}: ${assignmentName} (${dueDate})`
-        })
+      ['|講義名|課題名|締切|', '|-----|-----|---|']
+        .concat(
+          assignments.map((a) => {
+            const courseName = a.course.fullname.replace(/\s\/\s.+/g, '')
+            const assignmentName =
+              a.name.match(/「(.+)」の提出期限が近づいています/)[1]
+            const dueDate = new Date(a.timestart * 1000).toLocaleString('ja-JP')
+            return `|${courseName}|${assignmentName}|${dueDate}|`
+          })
+        )
         .join('\n')
     )
   })
